@@ -1,0 +1,44 @@
+@charset "UTF-8";
+
+// Import site color scheme
+@import "{{ site.theme }}";
+
+// Custom adjustments for a "Typora-like" clean look
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  line-height: 1.6;
+}
+
+// Enhance codebase readability
+code {
+  font-family: "JetBrains Mono", "Fira Code", "Source Code Pro", Consolas, "Courier New", monospace;
+  font-size: 0.9em;
+}
+
+// Make the layout slightly wider for better readability on large screens
+.container {
+  max-width: 900px;
+}
+
+// Adjust headers
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  color: #333;
+}
+
+h1 {
+  border-bottom: 1px solid #eaecef;
+  padding-bottom: 0.3em;
+}
+
+h2 {
+  border-bottom: 1px solid #eaecef;
+  padding-bottom: 0.3em;
+}
+
+// Blockquotes styling
+blockquote {
+  border-left: 4px solid #dfe2e5;
+  color: #6a737d;
+  padding-left: 1em;
+}
