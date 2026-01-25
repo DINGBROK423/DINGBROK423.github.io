@@ -1,0 +1,13 @@
+remote_theme: just-the-docs/just-the-docs
+
+title: 清华OS实习开发日志
+description: 记录StarryOS系统模块按需加载开发过程
+color_scheme: nil
+
+# Enable or disable the site search
+search_enabled: true
+
+# Aux links for the upper right navigation
+aux_links:
+  "GitHub Repository":
+    - "//github.com/DINGBROK423/DINGBROK423.github.io"
