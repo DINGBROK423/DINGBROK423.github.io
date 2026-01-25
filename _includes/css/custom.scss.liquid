@@ -1,13 +1,7 @@
-@charset "UTF-8";
-
-// Import site color scheme
-@import "{{ site.theme }}";
 
 // Custom adjustments for a "Typora-like" clean look
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-  line-height: 1.6;
-}
+// Note: This file is included AFTER the theme's variables but BEFORE the rest of the theme CSS.
+// Do NOT import the theme here.
 
 // Enhance codebase readability
 code {
