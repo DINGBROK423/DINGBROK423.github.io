@@ -121,3 +121,7 @@ StarryOS的内核模块分成两大部分：ArceOS和StarryOS。二者又分别�
 
 根文件系统实现（ext4/FAT）可以延迟到首次访问磁盘文件时加载。
 
+**执行计划补充**
+1. 参考陈林峰同学工作：模块加载
+2. 如果模块加载实现较为完善，可以直接在此基础上进行设计按需加载
+3. 参考 https://github.com/Starry-OS/StarryOS/tree/dev 模块化更为完善的分支
