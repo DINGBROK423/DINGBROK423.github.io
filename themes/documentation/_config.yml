@@ -1,0 +1,4 @@
+node_sass:
+  outputStyle: expanded
+  precision: 4
+  sourceComments: false

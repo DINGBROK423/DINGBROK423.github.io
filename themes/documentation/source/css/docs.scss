@@ -1,0 +1,524 @@
+// ==================== Variables ====================
+$sidebar-width: 280px;
+$sidebar-bg: #1a1c2e;
+$sidebar-text: #a0a3bd;
+$sidebar-heading: #e4e6f0;
+$sidebar-active: #6c8aff;
+$sidebar-hover-bg: rgba(108, 138, 255, 0.08);
+
+$content-bg: #ffffff;
+$text-primary: #1e2a3a;
+$text-secondary: #4a5568;
+$text-muted: #718096;
+$border-color: #e2e8f0;
+$link-color: #4a7cf7;
+$link-hover: #2b5ce6;
+$code-bg: #f7f8fa;
+$code-border: #e2e8f0;
+
+// ==================== Reset & Base ====================
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 15px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: $text-primary;
+    background: $content-bg;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+}
+
+// ==================== Sidebar ====================
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: $sidebar-width;
+    background: $sidebar-bg;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.sidebar-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: -0.3px;
+
+        svg {
+            opacity: 0.9;
+            flex-shrink: 0;
+        }
+
+        &:hover {
+            color: $sidebar-active;
+        }
+    }
+}
+
+.sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 0;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+    }
+}
+
+.nav-group {
+    margin-bottom: 8px;
+}
+
+.nav-group-title {
+    padding: 8px 24px 6px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: rgba(160, 163, 189, 0.6);
+}
+
+.nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-item a {
+    display: flex;
+    align-items: center;
+    padding: 7px 24px;
+    font-size: 13.5px;
+    color: $sidebar-text;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    border-left: 3px solid transparent;
+    line-height: 1.5;
+
+    .nav-indicator {
+        display: none;
+    }
+
+    &:hover {
+        color: #e4e6f0;
+        background: $sidebar-hover-bg;
+    }
+
+    &.active {
+        color: $sidebar-active;
+        background: rgba(108, 138, 255, 0.12);
+        border-left-color: $sidebar-active;
+        font-weight: 500;
+    }
+}
+
+.sidebar-footer {
+    padding: 16px 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+
+    a {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: $sidebar-text;
+        text-decoration: none;
+        font-size: 13px;
+        transition: color 0.15s ease;
+
+        &:hover {
+            color: #fff;
+        }
+
+        svg {
+            flex-shrink: 0;
+        }
+    }
+}
+
+// ==================== Main Content ====================
+.content {
+    margin-left: $sidebar-width;
+    min-height: 100vh;
+    background: $content-bg;
+}
+
+.article {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 48px 48px 32px;
+}
+
+.article-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $text-primary;
+    letter-spacing: -0.5px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #edf0f7;
+    line-height: 1.3;
+}
+
+.article-body {
+
+    // Headings
+    h1 {
+        font-size: 1.85rem;
+        font-weight: 700;
+        color: $text-primary;
+        margin: 40px 0 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid $border-color;
+        letter-spacing: -0.3px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: $text-primary;
+        margin: 36px 0 16px;
+        letter-spacing: -0.2px;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: $text-primary;
+        margin: 28px 0 12px;
+    }
+
+    h4 {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: $text-secondary;
+        margin: 24px 0 10px;
+    }
+
+    // Paragraphs and Lists
+    p {
+        margin: 0 0 16px;
+        color: $text-secondary;
+        line-height: 1.8;
+    }
+
+    ul,
+    ol {
+        margin: 0 0 16px;
+        padding-left: 24px;
+        color: $text-secondary;
+
+        li {
+            margin-bottom: 6px;
+            line-height: 1.7;
+        }
+    }
+
+    // Links
+    a {
+        color: $link-color;
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: all 0.15s ease;
+
+        &:hover {
+            color: $link-hover;
+            border-bottom-color: $link-hover;
+        }
+    }
+
+    // Inline code
+    code,
+    tt {
+        font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+        font-size: 0.88em;
+        padding: 2px 6px;
+        background: $code-bg;
+        border: 1px solid $code-border;
+        border-radius: 4px;
+        color: #e53e3e;
+    }
+
+    // Code blocks
+    pre {
+        margin: 0 0 20px;
+        border-radius: 8px;
+        overflow: hidden;
+
+        code {
+            display: block;
+            padding: 0;
+            background: none;
+            border: none;
+            border-radius: 0;
+            color: inherit;
+            font-size: 0.87em;
+            line-height: 1.65;
+        }
+    }
+
+    // Highlight blocks
+    .highlight {
+        background: #1e2235;
+        border: none;
+        border-radius: 8px;
+        margin: 0 0 20px;
+        overflow: auto;
+        font-size: 13px;
+        line-height: 1.65;
+
+        table {
+            width: 100%;
+
+            .gutter,
+            .code {
+                border: none;
+            }
+
+            .gutter {
+                width: 40px;
+                background: rgba(0, 0, 0, 0.15);
+                border-right: 1px solid rgba(255, 255, 255, 0.06);
+
+                pre {
+                    color: rgba(255, 255, 255, 0.25);
+                    padding: 16px 12px;
+                    text-align: right;
+                    margin: 0;
+                }
+            }
+
+            .code {
+                width: 99%;
+
+                pre {
+                    padding: 16px 20px;
+                    margin: 0;
+                }
+            }
+        }
+
+        pre {
+            background: transparent;
+            border: none;
+            margin: 0;
+            color: #e4e6f0;
+        }
+
+        // Syntax colors (dark theme)
+        .comment {
+            color: #636d83;
+        }
+
+        .keyword {
+            color: #c792ea;
+        }
+
+        .string {
+            color: #c3e88d;
+        }
+
+        .number {
+            color: #f78c6c;
+        }
+
+        .function {
+            color: #82aaff;
+        }
+
+        .title {
+            color: #ffcb6b;
+        }
+
+        .params {
+            color: #89ddff;
+        }
+
+        .built_in {
+            color: #82aaff;
+        }
+
+        .attr {
+            color: #ffcb6b;
+        }
+
+        .variable {
+            color: #f07178;
+        }
+
+        .meta {
+            color: #89ddff;
+        }
+
+        .addition {
+            color: #c3e88d;
+        }
+
+        .deletion {
+            color: #f07178;
+        }
+    }
+
+    // Tables
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0 0 20px;
+        font-size: 0.92em;
+
+        th {
+            background: #f7f8fa;
+            font-weight: 600;
+            text-align: left;
+            padding: 10px 14px;
+            border: 1px solid $border-color;
+            color: $text-primary;
+        }
+
+        td {
+            padding: 9px 14px;
+            border: 1px solid $border-color;
+            color: $text-secondary;
+        }
+
+        tr:hover td {
+            background: #fafbfd;
+        }
+    }
+
+    // Blockquote
+    blockquote {
+        margin: 0 0 20px;
+        padding: 12px 20px;
+        border-left: 4px solid $sidebar-active;
+        background: #f0f4ff;
+        border-radius: 0 8px 8px 0;
+        color: $text-secondary;
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    // Horizontal rule
+    hr {
+        border: none;
+        height: 1px;
+        background: $border-color;
+        margin: 32px 0;
+    }
+
+    // Images
+    img {
+        max-width: 100%;
+        border-radius: 6px;
+        margin: 8px 0;
+    }
+
+    // Strong and emphasis
+    strong {
+        font-weight: 600;
+        color: $text-primary;
+    }
+}
+
+// ==================== Page Navigation ====================
+.page-nav {
+    display: flex;
+    justify-content: space-between;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 24px 48px 48px;
+    gap: 16px;
+}
+
+.page-nav-prev,
+.page-nav-next {
+    display: flex;
+    flex-direction: column;
+    padding: 14px 20px;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    min-width: 160px;
+
+    &:hover {
+        border-color: $sidebar-active;
+        background: #f8f9ff;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(108, 138, 255, 0.12);
+    }
+}
+
+.page-nav-next {
+    margin-left: auto;
+    text-align: right;
+}
+
+.page-nav-label {
+    font-size: 12px;
+    color: $text-muted;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.page-nav-title {
+    font-size: 14px;
+    color: $link-color;
+    font-weight: 500;
+}
+
+// ==================== Responsive ====================
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 240px;
+    }
+
+    .content {
+        margin-left: 240px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+
+    .content {
+        margin-left: 0;
+    }
+
+    .article {
+        padding: 24px 20px;
+    }
+
+    .page-nav {
+        padding: 16px 20px 32px;
+        flex-direction: column;
+    }
+}

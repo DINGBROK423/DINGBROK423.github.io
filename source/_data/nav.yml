@@ -1,0 +1,16 @@
+- title: Log
+  items:
+  - id: development_log
+    title: 清华OS实习开发日志
+  - id: week1
+    title: Week 1
+  - id: week2
+    title: Week 2
+  - id: week3
+    title: Week 3
+- title: Docs
+  items:
+  - id: ALLOYSTACK_ONDEMAND_LOADING_ANALYSIS
+    title: AlloyStack 按需加载（On-Demand Loading）机制分析
+  - id: BOOT_ANALYSIS
+    title: StarryOS 宏内核启动流程分析
