@@ -432,14 +432,3 @@ _ => {
     → drop(owner) → drop(KmodMem) → dealloc_frames  // 释放内存
 ```
 
----
-
-## 和你的按需加载的结合点
-
-你可以基于他的 LKM 把 procfs **真正做成可加载模块**：
-
-1. 把 proc.rs 移到 `modules/procfs/src/lib.rs`，用 `#[init_fn]` 包装 `new_procfs()` + `mount_at()`
-2. 你的 `lazy_mount::register` 改为注册一个"从磁盘加载 .ko 并执行"的工厂函数
-3. 首次访问 proc 时，`try_lazy_mount` 触发 → 读取 `/root/modules/procfs.ko` → `init_module()` → 模块自行挂载 procfs
-
-这样 procfs 代码**不编进内核二进制**，运行时按需从磁盘加载，是真正的按需加载。但需要解决：procfs 引用了大量内核内部类型（`FD_TABLE`、`Process`、`tasks()` 等），这些都需要通过 `kallsyms` 导出或通过 shim 层桥接。
