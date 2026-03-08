@@ -8,9 +8,14 @@
     title: Week 2
   - id: week3
     title: Week 3
+  - id: week4
+    title: Week 4
+    
 - title: Docs
   items:
   - id: ALLOYSTACK_ONDEMAND_LOADING_ANALYSIS
     title: AlloyStack 按需加载（On-Demand Loading）机制分析
   - id: BOOT_ANALYSIS
     title: StarryOS 宏内核启动流程分析
+  - id: LKM
+    title: 内核可加载模块

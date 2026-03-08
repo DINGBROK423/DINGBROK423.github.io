@@ -2,6 +2,7 @@
 layout: post
 id: BOOT_ANALYSIS
 title: StarryOS 宏内核启动流程分析
+next: LKM
 prev: ALLOYSTACK_ONDEMAND_LOADING_ANALYSIS
 ---
 

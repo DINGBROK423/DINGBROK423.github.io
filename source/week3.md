@@ -3,6 +3,7 @@ layout: post
 id: week3
 title: Week3
 prev: week2
+next: week4
 ---
 
 ## 2026.2.20-2026.2.28
