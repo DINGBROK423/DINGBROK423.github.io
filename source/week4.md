@@ -218,3 +218,12 @@ impl ModuleLoader for KmodOnDemandLoader {
 1. 将procfs 拆出并创建对应.ko 内核模块，在init 函数中挂载 procfs，完成测试，发布仓库。
 2. 代码规范化。
 3. 尝试进行其他文件系统模块化处理。
+
+**老师建议**
+
+1. 外接文件系统（u盘）按需加载管理
+2. 同一文件系统用户态和内核态对应按需加载（手动/自动）
+https://github.com/0voice/kernel_awsome_feature/blob/main/%E8%AF%A6%E8%A7%A3%20FUSE%20%E7%94%A8%E6%88%B7%E6%80%81%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F.md
+
+3. 学习一下linux 文件系统
+4. 复现陈林峰同学的测试
