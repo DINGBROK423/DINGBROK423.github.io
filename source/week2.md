@@ -1,7 +1,7 @@
 ---
 layout: post
 id: week2
-title: Week2
+title: Week 2
 prev: week1
 next: week3
 ---

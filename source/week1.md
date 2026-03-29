@@ -1,7 +1,7 @@
 ---
 layout: post
 id: week1
-title: Week1
+title: Week 1
 prev: development_log
 next: week2
 ---

@@ -7,16 +7,16 @@ next: week7
 
 ## 2026.3.16-2026.3.22
 
-**工作内容**
+### 工作内容
 1. 导致系统崩溃的问题已得到彻底修复，当前 `procfs.ko` 按需加载与自动卸载全流程均稳定通过集成测试。
 2. 发布 [ondemand-kmod(按需加载模块)](https://github.com/DINGBROK423/ondemand-kmod)为外部库。提出相关issue追踪问题处理记录。
 3. 探索用户态文件系统按需加载工作。
 
 ---
 
-**Bug修复**
+### 本周核心代码变更总结--Bug修复
 
-### 1. 卸载导致内核 Panic 或死锁 (在中断上下文中进行阻塞操作)
+#### 1. 卸载导致内核 Panic 或死锁 (在中断上下文中进行阻塞操作)
 
 **现象**：等待模块空闲卸载时，系统随机发生与 `LruCache` 相关的 Panic（如 `unwrap()` 在 `None` 上失败）或直接死锁导致终端卡死。s
 
@@ -28,7 +28,7 @@ next: week7
 - 在 `api/src/lib.rs` 取消定时器里的轮询。
 - 改为通过 `axtask::spawn()` 生成一个专属常驻的**任务 (Task)**，里面包含死循环与异步睡眠 `axtask::future::block_on(axtask::future::sleep(Duration::from_millis(500)))`。垃圾回收过程处于标准的任务上下文中执行，从而可以安全获取 VFS 或驱动的互斥锁。
 
-### 2. 物理内存复用引发缺页异常 
+#### 2. 物理内存复用引发缺页异常 
 
 **现象**：当 `procfs.ko` 被自动卸载后，程序再次执行访问会正常触发重加载，但由于模块或系统尝试访问刚刚释放的物理内存以备他用，内核爆出“未处理缺页异常”并崩溃。
 
@@ -40,7 +40,7 @@ StarryOS 在加载 `.ko` 时，安全机制会对代码段设为“仅执行” 
 - **修改文件：** `api/src/kmod/mod.rs`
 - 修改了 `KmodMem` 的 `Drop` 特质。明确在执行 `dealloc_frames(self.paddr...)` 前，针对相应的虚地址空间 (`kernel_aspace().lock().protect()`) 强制重置保护标志为基本的 `MappingFlags::READ | MappingFlags::WRITE`，消除生命周期外的状态污染。
 
-### 3. Rust 生命周期误用的编译报错 
+#### 3. Rust 生命周期误用的编译报错 
 
 **现象**：编译 `starry-api` 时抛出 `[E0716] temporary value dropped while borrowed`。
 
@@ -55,7 +55,7 @@ StarryOS 在加载 `.ko` 时，安全机制会对代码段设为“仅执行” 
   let fd_table = fd_table_scope.read();
   ```
 
-### 4. 模块重编译时符号缺失导致的加载器 Panic
+#### 4. 模块重编译时符号缺失导致的加载器 Panic
 
 **现象**：完全构建基于 RISC-V 架构的新 `procfs.ko` 并打包为 `disk.img` 在 QEMU 中启动后，在最初挂载按需拦截时便报异常：`Symbol alloc::alloc::handle_alloc_error not found` 后 Panic。
 
@@ -68,7 +68,8 @@ Rust Nightly 更新后，对 `no_std` 与自定内存系统的二进制代码做
 
 
 ---
-**下周工作安排**
+
+### 下周工作安排
 
 1. 完成用户态文件系统按需加载工作。
 2. 若提前完成1，可以尝试做块设备文件系统按需加载。

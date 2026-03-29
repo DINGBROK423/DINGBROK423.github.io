@@ -1,13 +1,13 @@
 ---
 id: week4
-title: Week4
+title: Week 4
 prev: week3
 next: week5
 ---
 
 ## 2026.3.1-2026.3.8
 
-**工作内容**
+### 工作内容
 
 1. 阅读陈林峰同学的工作日志与相关代码，了解模块可加载（LKM）的设计和架构，并总结提炼出阅读文档。在陈林峰同学工作基础上，进行按需加载的设计。
 2. 重构一下实习日志文档。
@@ -93,9 +93,9 @@ Registered ──on_access──► Loading ──success──► Active
 
 我将按需加载功能独立出一个外部库 **ondemand-kmod**
 
-### ondemand-kmod
+#### ondemand-kmod
 
-#### `ondemand-kmod/src/loader.rs` — 加载器 trait
+##### `ondemand-kmod/src/loader.rs` — 加载器 trait
 
 定义两个核心 trait，由内核集成层实现：
 
@@ -109,7 +109,7 @@ Registered ──on_access──► Loading ──success──► Active
 
 ---
 
-#### `ondemand-kmod/src/trigger.rs` — 触发器
+##### `ondemand-kmod/src/trigger.rs` — 触发器
 
 `AccessEvent<'a>` 枚举表示三种访问事件：
 
@@ -131,7 +131,7 @@ pub enum AccessEvent<'a> {
 
 ---
 
-#### `ondemand-kmod/src/lifecycle.rs` — 生命周期
+##### `ondemand-kmod/src/lifecycle.rs` — 生命周期
 
 核心类型：
 
@@ -152,7 +152,7 @@ pub enum AccessEvent<'a> {
 
 ---
 
-#### `ondemand-kmod/src/monitor.rs` — 空闲监视器
+##### `ondemand-kmod/src/monitor.rs` — 空闲监视器
 
 `IdleMonitor::tick()` 实现三阶段扫描算法：
 
@@ -174,7 +174,7 @@ Phase 3 (持锁):
 
 ---
 
-#### `ondemand-kmod/src/registry.rs` — 模块注册表
+##### `ondemand-kmod/src/registry.rs` — 模块注册表
 
 `ModuleRegistry<L: ModuleLoader>` 是核心数据结构：
 
@@ -191,9 +191,9 @@ Phase 3 (持锁):
 
 `on_access` 采用**无锁加载模式**：先持锁确认需要加载并设为 `Loading`，释放锁后执行 `loader.load()`，再持锁更新状态。
 
-### StarryOS 集成层
+#### StarryOS 集成层
 
-#### `api/src/kmod/ondemand.rs` — 集成桥梁
+##### `api/src/kmod/ondemand.rs` — 集成桥梁
 
 **`KmodOnDemandLoader`** — 实现 `ModuleLoader` trait：
 
@@ -213,13 +213,17 @@ impl ModuleLoader for KmodOnDemandLoader {
 }
 ```
 
-**下周工作安排**
+---
+
+### 下周工作安排
 
 1. 将procfs 拆出并创建对应.ko 内核模块，在init 函数中挂载 procfs，完成测试，发布仓库。
 2. 代码规范化。
 3. 尝试进行其他文件系统模块化处理。
 
-**老师建议**
+---
+
+### 老师建议
 
 1. 外接文件系统（u盘）按需加载管理
 2. 同一文件系统用户态和内核态对应按需加载（手动/自动）

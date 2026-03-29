@@ -1,26 +1,26 @@
 ---
 id: week5
-title: Week5
+title: Week 5
 prev: week4
 next: week6
 ---
 
 ## 2026.3.9-2026.3.15
 
-**工作内容**
+### 工作内容
 
 修理一些按需加载模块的bug以及架构上不合理的地方，秉持尽可能减少对内核代码的改动原则。将procfs解除静态挂载并能独立出成为.ko文件，完成该模块按需加载测试（调用时加载，5s后自动卸载）
 
+#### 本周核心代码变更总结
 
-
-1. 新增独立的 `procfs.ko` 模块 crate，用于承载 procfs 的挂载/卸载逻辑：
+##### 1. 新增独立的 `procfs.ko` 模块 crate，用于承载 procfs 的挂载/卸载逻辑：
 
 - `procfs_init()`：直接使用 `axfs_ng::FS_CONTEXT` 创建 `/proc` 挂载点并挂载 `starry_api::vfs::new_procfs()`
 - `procfs_exit()`：直接解析 `/proc` 并执行 `unmount()`
 - 模块侧自行依赖 `axfs-ng` 与 `axfs-ng-vfs`，避免在原有 `api/src/vfs/mod.rs` 中增加专用挂载封装
 - 通过 `module!` 宏导出模块元数据（`name = "procfs"`）
 
-2. 新增  `api/src/kmod/ondemand_builtin.rs` 将按需加载框架桥接与模块策略注册解耦：
+##### 2. 新增  `api/src/kmod/ondemand_builtin.rs` 将按需加载框架桥接与模块策略注册解耦：
 
 - `ondemand.rs`：仅负责 `ModuleLoader` 适配、全局 `REGISTRY`、`with_ondemand()` 与 `tick_ondemand()`，保持泛型
 - `ondemand_builtin.rs`：承载 StarryOS 内建策略（如 procfs 的路径触发注册）
@@ -36,13 +36,13 @@ let _ = super::ondemand::register_module(ModuleDesc {
     usage: None,
 });
 ```
-3. `ondemand-kmod/src/monitor.rs` 修复自动卸载状态机的一致性问题
+##### 3. `ondemand-kmod/src/monitor.rs` 修复自动卸载状态机的一致性问题
 
 - 旧行为：`loader.unload(handle)` 失败时，仍会把模块状态置为 `Unloaded`
 - 新行为：仅当 unload 成功才置 `Unloaded`
 - unload 失败时：恢复 `State::Active`、恢复 `loaded_handle` 并 `touch(now)`，后续 tick 可安全重试
 
-4.  `api/src/kmod/ondemand.rs` 为 `procfs` 增加两阶段卸载保护（loader 层）：
+##### 4.  `api/src/kmod/ondemand.rs` 为 `procfs` 增加两阶段卸载保护（loader 层）：
 
 - 第一次触发 unload：先尝试 `unmount /proc`，并返回 `UnloadError::InUse`（延后真正模块释放）
 - 后续 tick 再次调用 unload：若 `/proc` 已不是挂载根，再执行 `delete_module("procfs")`
@@ -52,13 +52,13 @@ let _ = super::ondemand::register_module(ModuleDesc {
 下一次 tick：检测到 proc 已不是挂载根后，再执行 delete_module
 
 
-5. `modules/procfs/src/lib.rs`
+##### 5. `modules/procfs/src/lib.rs`
 
 `/proc` 卸载已在上层两阶段卸载路径中完成，模块 `exit_fn` 只负责退出收尾，避免重复卸载副作用。
 
 已在 lib.rs 将 procfs_exit 改为只记录退出日志，避免重复卸载同一挂载点。
 
-6. 测试：
+#### 运行测试：
 
 ```bash
 # hello.ko 可加载模块测试
@@ -427,7 +427,10 @@ make[1]: Leaving directory '/workspaces/StarryOS/arceos'
 @DINGBROK423 ➜ /workspaces/StarryOS (lkmod) $ 
 
 ```
-**问题报告**
+
+---
+
+### 问题报告
 
 在 QEMU 中执行以下序列时会出现崩溃：
 
@@ -435,12 +438,12 @@ make[1]: Leaving directory '/workspaces/StarryOS/arceos'
 2. 空闲超时后触发自动卸载（日志显示 unload + exit + 内存释放）
 3. 随后执行普通命令（如 `ls`）触发内核异常（Page Fault / IllegalInstruction）
 
-### 已确认成功部分
+**已确认成功部分**
 
 - 按需加载链路成功：`NotFound` → `with_ondemand()` → `load(procfs.ko)` → `procfs_init()` → `/proc` 可读
 - 自动卸载链路可触发：定时器 tick 会进入 unload 路径并调用模块退出
 
-### 根因判断（当前结论）
+**根因判断（当前结论）**
 
 当前问题不在“是否触发按需加载”，而在“文件系统卸载的生命周期安全性”：
 
@@ -449,7 +452,7 @@ make[1]: Leaving directory '/workspaces/StarryOS/arceos'
 3. 当模块内存被释放后，后续普通 VFS 路径访问可能命中失效对象，导致 trap
 4. 自动卸载目前由 timer 回调驱动，执行上下文为 irq/preemption-disabled，进一步放大了卸载路径风险
 
-### 目前补丁状态
+**目前补丁状态**
 
 已实现的缓解项：
 
@@ -458,9 +461,9 @@ make[1]: Leaving directory '/workspaces/StarryOS/arceos'
 
 上述缓解项可降低时序风险，但不能从根本上保证卸载安全，崩溃仍可能出现。
 
+---
 
-
-**下周工作安排**
+### 下周工作安排
 
 1. 查看模块卸载后内核崩溃退出原因（应该是文件系统VFS层的问题）
 2. 代码规范化。

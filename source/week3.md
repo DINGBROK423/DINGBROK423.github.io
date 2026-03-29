@@ -1,14 +1,14 @@
 ---
 layout: post
 id: week3
-title: Week3
+title: Week 3
 prev: week2
 next: week4
 ---
 
 ## 2026.2.20-2026.2.28
 
-**工作内容：用户态部分文件系统功能按需加载（procfs）**
+### 工作内容：用户态部分文件系统功能按需加载（procfs）
 
 1. **procfs** 是理想的一个按需加载模块，其功能集中于用户态中，对于内核捆绑程度较低。对于一个不需要 procfs 的应用场景，节省了 procfs 初始化的 CPU 时间以及procfs 数据结构占用的 **RAM**。
 
@@ -179,8 +179,9 @@ starry:~# ls /proc
 [196.357802 0:9 starry_api::syscall::task::wait:64] sys_waitpid <= pid: -1, options: WaitOptions(WUNTRACED)
 [196.361613 0:9 starry_api::syscall::task::wait:64] sys_waitpid <= pid: -1, options: WaitOptions(WNOHANG | WUNTRACED)
 ```
+---
 
-**主要问题**
+### 主要问题
 
 1. 由于我对于模块按需加载设计是参考Serverless运行时 AlloyStack。但是二者运行环境和设计架构存在很大差异。 AlloyStack 能直接使用 `dlopen`/`dlsym` 这些 Linux 系统调用来实现动态加载。但StarryOS作为系统宏内核，需要自己实现动态链接服务，否则在裸机环境下无法直接生成可加载的`.so`。
 
@@ -195,7 +196,9 @@ starry:~# ls /proc
 
 3. axfs作为一个模块，粒度较粗，如果对文件系统部分功能进行更细粒度拆卸，需要涉及到外部库的修改。
 
-**下一步的计划/建议**
+---
+
+### 下一步的计划/建议
 
 1. 完善文件系统模块用户态功能按需加载。
 2. 和老师进行交流，内核态功能是否需要进行按需加载设计。
