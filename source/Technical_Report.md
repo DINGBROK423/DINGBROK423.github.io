@@ -1,8 +1,8 @@
 ---
 layout: post
 id: Technical_Report
-title: StarryOS 内核模块按需加载与 FUSE 用户态文件系统实现
-prev: LKM
+title: 实习技术报告：StarryOS 内核模块按需加载与 FUSE 用户态文件系统驱动实现
+prev: FUSE_FILE_SYSTEM_DESIGN
 ---
 
 ## 摘要

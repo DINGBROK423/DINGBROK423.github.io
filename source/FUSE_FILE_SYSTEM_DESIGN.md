@@ -3,7 +3,7 @@ layout: post
 title: FUSE 文件系统
 id: FUSE_FILE_SYSTEM_DESIGN
 prev: LKM
-next: 
+next: Technical_Report
 ---
 
 https://juicefs.com/zh-cn/blog/engineering/fuse-file-system-design
