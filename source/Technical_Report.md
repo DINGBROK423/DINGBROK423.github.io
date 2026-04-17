@@ -379,16 +379,16 @@ starry:~#
 **测试日志**：
 
 ```bash
-[ 86.910672 0:14 kmod_loader::loader:354] Module(Some("fuse")) loaded successfully!
-[ 86.969887 0:14 fuse:41] Fuse module loaded via on-demand mechanism.
-[ 86.978165 0:14 starry_api::kmod:164] Module(fuse) init returned: 0
-[ 86.983628 0:14 starry_api::kmod::ondemand:55] [memtest] after_load_fuse RustHeap=9414642 PageCache=1069056 Pages=13035
-[ 86.988623 0:14 starry_api::kmod::ondemand:101] [ondemand] module 'fuse' loaded, handle=0x17c96ff18
+[  8.163909 0:11 kmod_loader::loader:354] Module(Some("fuse")) loaded successfully!
+[  8.168286 0:11 fuse:41] Fuse module loaded via on-demand mechanism.
+[  8.169185 0:11 starry_api::kmod:164] Module(fuse) init returned: 0
+[  8.170310 0:11 starry_api::kmod::ondemand:55] [memtest] after_load_fuse RustHeap=8862712 PageCache=806912 Pages=4779
+[  8.171749 0:11 starry_api::kmod::ondemand:101] [ondemand] module 'fuse' loaded, handle=0x17c96ff18
 Opened /dev/fuse
 Mounted /mnt/fuse successfully
 About to fork self-test child...
-fork returned 16
-Spawned self-test child pid=16
+fork returned 13
+Spawned self-test child pid=13
 fork returned 0
 === FUSE Self-Test Starting ===
 Received FUSE request: opcode=26, unique=1, nodeid=0
@@ -419,43 +419,43 @@ Test complete, daemon exiting.
 Unmounted /mnt/fuse
 FUSE device closed.
 Waiting 7s for idle unload...
-[ 92.723775 0:6 starry_api::kmod::ondemand:113] [ondemand] unload handle=0x17c96ff18
-[ 92.724804 0:6 starry_api::kmod::ondemand:55] [memtest] before_unload_fuse RustHeap=8371572 PageCache=1069056 Pages=13044
-[ 92.726149 0:6 kmod_loader::loader:122] Calling module exit function...
-[ 92.727153 0:6 fuse:53] Fuse module exit called.
-[ 92.727789 0:6 starry_api::kmod:179] Module(fuse) exited
-[ 92.728495 0:6 starry_api::kmod:74] KmodMem::drop: Deallocating paddr=PA:0x83a7c000, num_pages=10
-[ 92.729624 0:6 starry_api::kmod:74] KmodMem::drop: Deallocating paddr=PA:0x83a86000, num_pages=5
-[ 92.730557 0:6 starry_api::kmod:74] KmodMem::drop: Deallocating paddr=PA:0x819e8000, num_pages=1
-[ 92.731241 0:6 starry_api::kmod:74] KmodMem::drop: Deallocating paddr=PA:0x81a7b000, num_pages=1
-[ 92.732082 0:6 starry_api::kmod::ondemand:55] [memtest] after_unload_fuse RustHeap=8370144 PageCache=1069056 Pages=13027
+[ 13.742596 0:6 starry_api::kmod::ondemand:113] [ondemand] unload handle=0x17c96ff18
+[ 13.746465 0:6 starry_api::kmod::ondemand:55] [memtest] before_unload_fuse RustHeap=8352536 PageCache=806912 Pages=4788
+[ 13.751490 0:6 kmod_loader::loader:122] Calling module exit function...
+[ 13.755245 0:6 fuse:53] Fuse module exit called.
+[ 13.757140 0:6 starry_api::kmod:179] Module(fuse) exited
+[ 13.761513 0:6 starry_api::kmod:74] KmodMem::drop: Deallocating paddr=PA:0x81a3b000, num_pages=10
+[ 13.767803 0:6 starry_api::kmod:74] KmodMem::drop: Deallocating paddr=PA:0x81a45000, num_pages=5
+[ 13.770209 0:6 starry_api::kmod:74] KmodMem::drop: Deallocating paddr=PA:0x819e5000, num_pages=1
+[ 13.770881 0:6 starry_api::kmod:74] KmodMem::drop: Deallocating paddr=PA:0x81a4a000, num_pages=1
+[ 13.772583 0:6 starry_api::kmod::ondemand:55] [memtest] after_unload_fuse RustHeap=8351108 PageCache=806912 Pages=4771
 === FUSE On-Demand Memory Test Results ===
 
 Table 1. Raw snapshots from kernel
 Phase                 RustHeap(B)    RustHeap(d)          Pages       Pages(d)
 ----------------------------------------------------------------------------
-Before load               8363090              -          13018              -
-After load                9414642       +1051552          13035            +17
-Before unload             8371572          +8482          13044            +26
-After unload              8370144          +7054          13027            -17
+Before load               8315080              -           4762              -
+After load                8862712        +547632           4779            +17
+Before unload             8352536         +37456           4788            +26
+After unload              8351108         +36028           4771            -17
 
 Table 2. Memory contribution analysis
 Configuration                                               Size(KB)        Pages Contribution
 -----------------------------------------------------------------------------------------------
-A. Static baseline (fuse.ko + starryfuse resident)              1230            -     baseline
-   - fuse.ko (575 KB)                                            575            -            -
+A. Static baseline (fuse.ko + starryfuse resident)              1071            -     baseline
+   - fuse.ko (416 KB)                                            416            -            -
    - starryfuse libs (655 KB)                                    655            -            -
 B. On-demand mapped pages (loader vmalloc)                        68           17  actual load
 D. Runtime overhead (mount/fork/VFS, unrelated)                    0            0    transient
 -----------------------------------------------------------------------------------------------
-Memory saving vs static baseline                                1230            - resident reduction
+Memory saving vs static baseline                                1071            - resident reduction
 
 Conclusion:
-  - Static linking would keep ~1230 KB of FUSE driver resident in kernel memory.
+  - Static linking would keep ~1071 KB of FUSE driver resident in kernel memory.
   - On-demand loading reduces this resident footprint to ~0 KB after unload.
-  - Actual memory saving = 1230 KB (all static baseline reclaimed after unload).
+  - Actual memory saving = 1071 KB (all static baseline reclaimed after unload).
 
-Result: PASS  (on-demand loading saves 1230 KB of resident kernel memory)
+Result: PASS  (on-demand loading saves 1071 KB of resident kernel memory)
 starry:~# 
 ```
 
@@ -465,27 +465,27 @@ starry:~#
 
 | Phase | RustHeap (B) | Δ RustHeap | Pages | Δ Pages |
 |-------|-------------|------------|-------|---------|
-| Before load | 8,363,090 | — | 13,018 | — |
-| After load | 9,414,642 | +1,051,552 | 13,035 | +17 |
-| Before unload | 8,371,572 | +8,482 | 13,044 | +26 |
-| After unload | 8,370,144 | +7,054 | 13,027 | −17 |
+| Before load | 8,315,080 | — | 4,762 | — |
+| After load | 8,862,712 | +547,632 | 4,779 | +17 |
+| Before unload | 8,352,536 | +37,456 | 4,788 | +26 |
+| After unload | 8,351,108 | +36,028 | 4,771 | −17 |
 
 **表 2：内存占用构成分析**
 
 | Configuration | Size (KB) | Pages | Contribution |
 |--------------|-----------|-------|--------------|
-| A. Static baseline (fuse.ko + starryfuse resident) | 1,230 | — | baseline |
-| ‑ fuse.ko | 575 | — | — |
+| A. Static baseline (fuse.ko + starryfuse resident) | 1,071 | — | baseline |
+| ‑ fuse.ko | 416 | — | — |
 | ‑ starryfuse libs | 655 | — | — |
 | B. On-demand mapped pages (loader vmalloc) | 68 | 17 | actual load |
 | D. Runtime overhead (mount/fork/VFS, transient) | 0 | 0 | transient |
-| **Memory saving vs static baseline** | **1,230** | — | resident reduction |
+| **Memory saving vs static baseline** | **1,071** | — | resident reduction |
 
 从 **表 1** 可见，按需加载在 `After load` 阶段使内核页数增加了 17 页（约 68 KB），这是 `kmod-loader` 通过 `vmalloc` 映射 `.ko` 产生的实际内存开销。经过 FUSE 自测试验、卸载挂载点并等待 7 s 空闲超时后，模块进入 `Unloading` 状态，`KmodMem::drop` 逐页释放物理内存，最终 `After unload` 页数相比 `After load` 回落 17 页，证明模块占用的 ELF 内存被完全回收。
 
-测试前后页数从 13,018 增至 13,027（+9 页，约 36 KB），这部分增量属于 mount/fork/VFS 等运行时 transient 开销，并非模块泄漏。
+测试前后页数从 4,762 增至 4,771（+9 页，约 36 KB），这部分增量属于 mount/fork/VFS 等运行时 transient 开销，并非模块泄漏。
 
-**表 2** 进一步量化了按需加载的收益：若将 `fuse.ko`（575 KB）与 `starryfuse` 依赖库（655 KB）静态编译进内核，常驻内存开销约为 1,230 KB；而按需加载模式下，FUSE 模块卸载后常驻 footprint 降至约 0 KB，**实际节省内核常驻内存 1,230 KB**。
+**表 2** 进一步量化了按需加载的收益：若将 `fuse.ko`（416 KB）与 `starryfuse` 依赖库（655 KB）静态编译进内核，常驻内存开销约为 1,071 KB；而按需加载模式下，FUSE 模块卸载后常驻 footprint 降至约 0 KB，**实际节省内核常驻内存 1,071 KB**。
 
 ---
 
