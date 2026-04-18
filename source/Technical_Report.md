@@ -505,7 +505,7 @@ starry:~#
 ---
 ## 7.相关链接
 
-项目工程仓库：https://github.com/DINGBROK423/StarryOS/tree/kmod
+项目工程仓库：https://github.com/DINGBROK423/StarryOS/tree/ondemand
 按需加载库：https://github.com/DINGBROK423/ondemand-kmod
 问题日志：https://github.com/DINGBROK423/ondemand-kmod/issues
 

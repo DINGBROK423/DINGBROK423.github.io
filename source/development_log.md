@@ -14,7 +14,7 @@ next: week1
 对比AlloyStack与StarryOS，为StarryOS设计系统模块按需加载，提升其内核性能。
 
 附：AlloyStack仓库链接：https://github.com/tanksys/AlloyStack
-项目工程仓库：https://github.com/DINGBROK423/StarryOS/tree/kmod
+项目工程仓库：https://github.com/DINGBROK423/StarryOS/tree/ondemand
 按需加载库：https://github.com/DINGBROK423/ondemand-kmod
 问题日志：https://github.com/DINGBROK423/ondemand-kmod/issues
 
