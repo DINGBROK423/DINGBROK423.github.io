@@ -148,7 +148,7 @@ StarryOS 的按需加载系统组成部分：
 
 - **`registry.rs`**：维护一个全局的模块注册表，记录每个模块的名称、触发器（路径前缀或设备号）、`.ko` 文件路径、超时阈值以及当前状态。
 - **`lifecycle.rs`**：定义六状态 FSM 的 `State` 枚举、`ModuleDesc` 模块描述符、`ModuleGuard` RAII 引用计数守卫以及 `ManagedModule` 运行时 bookkeeping 结构。状态转换的实际逻辑由 `registry.rs`（`on_access` 处理加载触发与状态迁移动作）和 `monitor.rs`（`tick` 中完成 `Active` → `Idle` 迁移及卸载决策）驱动。
-- **`monitor.rs`**：一个后台任务，周期性地扫描注册表中状态为 `Idle` 的模块。若发现某个模块的空闲时间超过阈值，则调用 `lifecycle::try_unload()` 发起卸载。
+- **`monitor.rs`**：实现 `IdleMonitor::tick()` 三阶段卸载算法。Phase 1 持锁扫描注册表，将引用计数为零且空闲超时的模块从 `Idle` 标记为 `Unloading`；Phase 2 在无锁环境下调用 `ModuleLoader::unload()` 执行实际卸载；Phase 3 再次持锁将成功卸载的模块状态回写为 `Unloaded`。该函数由 `api/src/kmod/ondemand.rs` 的 `tick_ondemand()` 定期调用。
 
 框架通过 `ModuleLoader` trait 与具体的操作系统解耦，定义了 `load()`、`unload()` 等方法。StarryOS 在 `api/src/kmod/ondemand.rs` 中提供 `KmodOnDemandLoader` 结构体作为该 trait 的具体实现，其内部调用现有的 `kmod-loader` 与 `axalloc` 内存管理接口。
 
