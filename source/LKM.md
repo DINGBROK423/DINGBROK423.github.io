@@ -3,6 +3,7 @@ layout: post
 id: LKM
 title: 内核可加载模块
 prev: BOOT_ANALYSIS
+next: FUSE_FILE_SYSTEM_DESIGN
 ---
 
 
