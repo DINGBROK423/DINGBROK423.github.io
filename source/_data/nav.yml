@@ -33,3 +33,5 @@
     title: FUSE 文件系统
   - id: Technical_Report
     title: StarryOS 内核模块按需加载与 FUSE 用户态文件系统实现
+  - id: future_work_plan
+    title: 后续工作安排
